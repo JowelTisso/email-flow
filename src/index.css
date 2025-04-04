@@ -1,7 +1,9 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Rubik", sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color: #3a3a3a;
+  font-size: 15px;
 }
 
 a {
@@ -23,5 +25,9 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+p{
+  margin: 0;
 }
 
