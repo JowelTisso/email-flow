@@ -17,7 +17,7 @@ export type SourceProps = {
 };
 
 export type MainModalProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   open: boolean;
   onOk: () => void;
   onCancel: () => void;
@@ -25,4 +25,5 @@ export type MainModalProps = {
   description: string;
   top?: number;
   height?: number;
+  showTooltip?: boolean;
 };

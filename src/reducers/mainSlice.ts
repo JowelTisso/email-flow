@@ -4,12 +4,16 @@ export interface MainState {
   isSourceModalOpen: boolean;
   isLeadModalOpen: boolean;
   isBlockModalOpen: boolean;
+  isColdEmailModalOpen: boolean;
+  isTemplateModalOpen: boolean;
 }
 
 const initialState: MainState = {
   isSourceModalOpen: false,
   isLeadModalOpen: false,
   isBlockModalOpen: false,
+  isColdEmailModalOpen: false,
+  isTemplateModalOpen: false,
 };
 
 export const mainSlice = createSlice({
@@ -25,11 +29,21 @@ export const mainSlice = createSlice({
     toggleBlockModal: (state) => {
       state.isBlockModalOpen = !state.isBlockModalOpen;
     },
+    toggleColdEmailModal: (state) => {
+      state.isColdEmailModalOpen = !state.isColdEmailModalOpen;
+    },
+    toggleTemplateModal: (state) => {
+      state.isTemplateModalOpen = !state.isTemplateModalOpen;
+    },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { toggleSourceModal, toggleLeadModal, toggleBlockModal } =
-  mainSlice.actions;
+export const {
+  toggleSourceModal,
+  toggleLeadModal,
+  toggleBlockModal,
+  toggleColdEmailModal,
+  toggleTemplateModal,
+} = mainSlice.actions;
 
 export default mainSlice.reducer;

@@ -30,3 +30,30 @@ export const dropDownMenuItems = [
     label: "Save and Paused",
   },
 ];
+
+export const EditorPlugins = [
+  "advlist",
+  "autolink",
+  "lists",
+  "link",
+  "image",
+  "charmap",
+  "preview",
+  "anchor",
+  "searchreplace",
+  "visualblocks",
+  "code",
+  "fullscreen",
+  "insertdatetime",
+  "media",
+  "table",
+  "code",
+  "help",
+  "wordcount",
+];
+
+export const EditorToolbars =
+  "undo redo | blocks | " +
+  "bold italic forecolor | alignleft aligncenter " +
+  "alignright alignjustify | bullist numlist outdent indent | " +
+  "removeformat | help";

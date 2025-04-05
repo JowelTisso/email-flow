@@ -57,6 +57,7 @@ const MainModal: React.FC<MainModalProps> = ({
   description,
   top,
   height,
+  showTooltip = true,
 }) => {
   return (
     <StyledModal
@@ -72,7 +73,7 @@ const MainModal: React.FC<MainModalProps> = ({
       <h2>
         {title}
         <Tooltip className="tooltip" title={description}>
-          <BsQuestionCircle />
+          {showTooltip && <BsQuestionCircle />}
         </Tooltip>
       </h2>
       <p>{description}</p>

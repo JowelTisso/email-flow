@@ -27,8 +27,10 @@ import AddSourceModal from "./components/SourceModal/AddSourceModal";
 import PlainText from "./components/Text/PlainText";
 import {
   toggleBlockModal,
+  toggleColdEmailModal,
   toggleLeadModal,
   toggleSourceModal,
+  toggleTemplateModal,
 } from "./reducers/mainSlice";
 import { RootState } from "./store";
 import { Header, Wrapper } from "./styles";
@@ -37,6 +39,8 @@ import {
   initialEdges,
   initialNodes,
 } from "./utils/Constants";
+import ColdEmailModal from "./components/ColdEmail/ColdEmailModal";
+import TemplateModal from "./components/TemplateModal/TemplateModal";
 
 const nodeTypes = {
   addLead: AddLead,
@@ -49,9 +53,13 @@ function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const { isSourceModalOpen, isLeadModalOpen, isBlockModalOpen } = useSelector(
-    (state: RootState) => state.main
-  );
+  const {
+    isSourceModalOpen,
+    isLeadModalOpen,
+    isBlockModalOpen,
+    isColdEmailModalOpen,
+    isTemplateModalOpen,
+  } = useSelector((state: RootState) => state.main);
   const dispatch = useDispatch();
 
   const onConnect = useCallback(
@@ -158,6 +166,16 @@ function App() {
         open={isLeadModalOpen}
         handleOk={handleOk}
         handleCancel={() => dispatch(toggleLeadModal())}
+      />
+      <ColdEmailModal
+        open={isColdEmailModalOpen}
+        handleOk={handleOk}
+        handleCancel={() => dispatch(toggleColdEmailModal())}
+      />
+      <TemplateModal
+        open={isTemplateModalOpen}
+        handleOk={handleOk}
+        handleCancel={() => dispatch(toggleTemplateModal())}
       />
     </Wrapper>
   );

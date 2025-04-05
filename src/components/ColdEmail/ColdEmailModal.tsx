@@ -1,9 +1,14 @@
-import { Button, Select } from "antd";
-import { ModalProps } from "../../utils/Types";
 import MainModal from "../ModalWrapper/MainModal";
-import styled from "styled-components";
+import { ModalProps } from "../../utils/Types";
+import { Button, Select } from "antd";
 import { BsPlusCircle } from "react-icons/bs";
 import { useState } from "react";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import {
+  toggleColdEmailModal,
+  toggleTemplateModal,
+} from "../../reducers/mainSlice";
 
 const Wrapper = styled.div`
   width: 99%;
@@ -20,7 +25,7 @@ const Wrapper = styled.div`
       color: #06a5fc;
       font-weight: 500;
       height: 40px;
-      width: 130px;
+      min-width: 130px;
       font-size: 1rem;
 
       .icon {
@@ -43,15 +48,18 @@ const Wrapper = styled.div`
   }
 `;
 
-const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
-  const [selectValue, setSelectValue] = useState([""]);
+const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
+  const [selectValue, setSelectValue] = useState("");
 
-  const handleChange = (value: string[]) => {
+  const dispatch = useDispatch();
+
+  const handleChange = (value: string) => {
     setSelectValue(value);
   };
 
   const clickHandler = () => {
-    window.open("https://run.salesblink.io/import-list/new", "_target");
+    dispatch(toggleTemplateModal());
+    dispatch(toggleColdEmailModal());
   };
 
   return (
@@ -59,49 +67,33 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       open={open}
       onOk={handleOk}
       onCancel={handleCancel}
-      title="Leads from List(s)"
-      description="Connect multiple lists as source for this sequence."
-      top={20}
-      height={620}
+      title="Cold Email"
+      description="Send an email to a lead."
+      height={550}
       showTooltip={false}
     >
       <Wrapper>
         <div className="header">
-          <h3>Select your List(s)</h3>
+          <h3>Email Template</h3>
           <Button className="btn-action" onClick={clickHandler}>
-            New List <BsPlusCircle className="icon" size={17} />
+            New Template <BsPlusCircle className="icon" size={17} />
           </Button>
         </div>
         <Select
-          mode="multiple"
           allowClear
           className="select"
           onChange={handleChange}
-          placeholder="Search for lists"
+          placeholder="Search for an Email Template"
           options={[
             { value: "jack", label: "Jack" },
             { value: "lucy", label: "Lucy" },
             { value: "Yiminghe", label: "yiminghe" },
             { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
+
             { value: "disabled", label: "Disabled", disabled: true },
           ]}
         />
-        {selectValue.length > 0 ? (
+        {selectValue ? (
           <Button type="primary" className="btn-insert">
             Insert
           </Button>
@@ -111,4 +103,4 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
   );
 };
 
-export default AddLeadModal;
+export default ColdEmailModal;

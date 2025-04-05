@@ -3,7 +3,7 @@ import MainModal from "../ModalWrapper/MainModal";
 import { SourceCardWrapper } from "./AddSourceStyles";
 import { ModalProps, SourceProps } from "../../utils/Types";
 import { useDispatch } from "react-redux";
-import { toggleLeadModal } from "../../reducers/mainSlice";
+import { toggleLeadModal, toggleSourceModal } from "../../reducers/mainSlice";
 
 export const SourceCard = ({
   title,
@@ -42,6 +42,7 @@ const AddSourceModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       description: "Connect multiple lists as source for this sequence.",
       onClick: () => {
         dispatch(toggleLeadModal());
+        dispatch(toggleSourceModal());
       },
       icon: <BsPersonPlus className="user-icon" size={35} />,
     },
