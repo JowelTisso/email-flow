@@ -6,4 +6,10 @@ export const COLORS = Object.freeze({
   leadUserIcon: "#f05494",
   leadUserBg: "#fbd6e5",
   leadUserBorder: "#f773aa",
+  sourceBg: "#e3cbfb",
+  sourceIcon: "#9a51af",
+  sourceBorder: "#ccaee4",
+  conditionBg: "#eaf1f7",
+  conditionIcon: "#1fa9f8",
+  conditionBorder: "#97cef4",
 });

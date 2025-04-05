@@ -1,5 +1,6 @@
 import {
   addEdge,
+  Connection,
   Controls,
   MiniMap,
   ReactFlow,
@@ -7,9 +8,13 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
-import { initialEdges, initialNodes } from "./utils/Constants";
+import {
+  dropDownMenuItems,
+  initialEdges,
+  initialNodes,
+} from "./utils/Constants";
 import { Header, Wrapper } from "./styles";
 import {
   BsPencil,
@@ -22,6 +27,9 @@ import PlainText from "./components/Text/PlainText";
 import Lead from "./components/Lead/Lead";
 import AddBlock from "./components/AddBlock";
 import { v4 as uuid } from "uuid";
+import AddSourceModal from "./components/SourceModal/AddSourceModal";
+import AddBlockModal from "./components/BlockModal/AddBlockModal";
+import AddLeadModal from "./components/Lead/AddLeadModal";
 
 const nodeTypes = {
   addLead: AddLead,
@@ -33,18 +41,12 @@ const nodeTypes = {
 function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
-  const items = [
-    {
-      key: "1",
-      label: "Save and Paused",
-    },
-  ];
 
   const onMenuClick: MenuProps["onClick"] = (e) => {
     console.log("click", e);
@@ -80,6 +82,22 @@ function App() {
     });
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    showModal();
+  }, []);
+
   return (
     <Wrapper className="flex-center">
       <Header>
@@ -102,7 +120,7 @@ function App() {
             type="primary"
             size="large"
             className="btn-action"
-            menu={{ items, onClick: onMenuClick }}
+            menu={{ items: dropDownMenuItems, onClick: onMenuClick }}
             onClick={addLeadNode}
             icon={<BsChevronDown />}
           >
@@ -125,6 +143,23 @@ function App() {
           <MiniMap />
         </ReactFlow>
       </div>
+
+      {/* <AddSourceModal
+        open={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      /> */}
+
+      {/* <AddBlockModal
+        open={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      /> */}
+      <AddLeadModal
+        open={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      />
     </Wrapper>
   );
 }
