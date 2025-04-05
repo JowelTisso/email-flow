@@ -2,6 +2,8 @@ import { BsPersonPlus } from "react-icons/bs";
 import MainModal from "../ModalWrapper/MainModal";
 import { SourceCardWrapper } from "./AddSourceStyles";
 import { ModalProps, SourceProps } from "../../utils/Types";
+import { useDispatch } from "react-redux";
+import { toggleLeadModal } from "../../reducers/mainSlice";
 
 export const SourceCard = ({
   title,
@@ -31,35 +33,37 @@ export const SourceCard = ({
   );
 };
 
-const sourceList = [
-  {
-    title: "Leads from List(s)",
-    description: "Connect multiple lists as source for this sequence.",
-    onClick: () => {
-      alert("Leads from Lists");
-    },
-    icon: <BsPersonPlus className="user-icon" size={35} />,
-  },
-  {
-    title: "Segment by Events",
-    description:
-      "Create a segment of leads who have engaged with emails previously.",
-    icon: <BsPersonPlus className="user-icon" size={35} />,
-  },
-  {
-    title: "Segment of List",
-    description: "Create a segment of leads which match SalesBlink Variables.",
-    icon: <BsPersonPlus className="user-icon" size={35} />,
-  },
-  {
-    title: "Lead from CRM Integration",
-    description:
-      "Create a segment of leads who have engaged with emails previously.",
-    icon: <BsPersonPlus className="user-icon" size={35} />,
-  },
-];
-
 const AddSourceModal = ({ open, handleOk, handleCancel }: ModalProps) => {
+  const dispatch = useDispatch();
+
+  const sourceList = [
+    {
+      title: "Leads from List(s)",
+      description: "Connect multiple lists as source for this sequence.",
+      onClick: () => {
+        dispatch(toggleLeadModal());
+      },
+      icon: <BsPersonPlus className="user-icon" size={35} />,
+    },
+    {
+      title: "Segment by Events",
+      description:
+        "Create a segment of leads who have engaged with emails previously.",
+      icon: <BsPersonPlus className="user-icon" size={35} />,
+    },
+    {
+      title: "Segment of List",
+      description:
+        "Create a segment of leads which match SalesBlink Variables.",
+      icon: <BsPersonPlus className="user-icon" size={35} />,
+    },
+    {
+      title: "Lead from CRM Integration",
+      description:
+        "Create a segment of leads who have engaged with emails previously.",
+      icon: <BsPersonPlus className="user-icon" size={35} />,
+    },
+  ];
   return (
     <MainModal
       open={open}

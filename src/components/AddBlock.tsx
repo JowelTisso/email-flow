@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { BsPlusLg } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { toggleBlockModal } from "../reducers/mainSlice";
 
 const Wrapper = styled.div`
   width: 30px;
@@ -13,8 +15,12 @@ const Wrapper = styled.div`
 `;
 
 const AddBlock = () => {
+  const dispatch = useDispatch();
   return (
-    <Wrapper className="flex-center">
+    <Wrapper
+      className="flex-center"
+      onClick={() => dispatch(toggleBlockModal())}
+    >
       <BsPlusLg className="icon" size={18} />
     </Wrapper>
   );

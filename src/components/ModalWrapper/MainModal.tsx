@@ -3,12 +3,11 @@ import { BsQuestionCircle } from "react-icons/bs";
 import styled from "styled-components";
 import { MainModalProps } from "../../utils/Types";
 
-const StyledModal = styled(Modal)<{ top?: string; height?: string }>`
+const StyledModal = styled(Modal)<{ top?: number; height?: number }>`
   top: ${({ top = 50 }) => top}px;
 
   .ant-modal-body {
     height: ${({ height = 500 }) => height}px;
-    overflow-y: scroll;
   }
 
   h2 {
@@ -39,6 +38,11 @@ const StyledModal = styled(Modal)<{ top?: string; height?: string }>`
     margin-bottom: 10px;
   }
 
+  section {
+    height: ${({ height = 400 }) => height - 100}px;
+    overflow-y: scroll;
+  }
+
   ::-webkit-scrollbar {
     display: none;
   }
@@ -51,6 +55,8 @@ const MainModal: React.FC<MainModalProps> = ({
   onCancel,
   title,
   description,
+  top,
+  height,
 }) => {
   return (
     <StyledModal
@@ -59,6 +65,8 @@ const MainModal: React.FC<MainModalProps> = ({
       onCancel={onCancel}
       width={850}
       footer={null}
+      top={top}
+      height={height}
     >
       <Divider className="top-divider" />
       <h2>

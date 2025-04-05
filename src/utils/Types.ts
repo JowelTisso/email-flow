@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import { IconType } from "react-icons";
 
 export type ModalProps = {
   open: boolean;
@@ -24,4 +23,6 @@ export type MainModalProps = {
   onCancel: () => void;
   title: string;
   description: string;
+  top?: number;
+  height?: number;
 };

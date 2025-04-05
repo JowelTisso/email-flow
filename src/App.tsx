@@ -8,28 +8,35 @@ import {
   useNodesState,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback, useEffect, useState } from "react";
+import { Dropdown, MenuProps } from "antd";
+import { useCallback } from "react";
+import {
+  BsChevronDown,
+  BsFillRocketTakeoffFill,
+  BsPencil,
+} from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuid } from "uuid";
 import "./App.css";
+import AddBlock from "./components/AddBlock";
+import AddBlockModal from "./components/BlockModal/AddBlockModal";
+import AddLead from "./components/Lead/AddLead";
+import AddLeadModal from "./components/Lead/AddLeadModal";
+import Lead from "./components/Lead/Lead";
+import AddSourceModal from "./components/SourceModal/AddSourceModal";
+import PlainText from "./components/Text/PlainText";
+import {
+  toggleBlockModal,
+  toggleLeadModal,
+  toggleSourceModal,
+} from "./reducers/mainSlice";
+import { RootState } from "./store";
+import { Header, Wrapper } from "./styles";
 import {
   dropDownMenuItems,
   initialEdges,
   initialNodes,
 } from "./utils/Constants";
-import { Header, Wrapper } from "./styles";
-import {
-  BsPencil,
-  BsChevronDown,
-  BsFillRocketTakeoffFill,
-} from "react-icons/bs";
-import { Dropdown, MenuProps } from "antd";
-import AddLead from "./components/Lead/AddLead";
-import PlainText from "./components/Text/PlainText";
-import Lead from "./components/Lead/Lead";
-import AddBlock from "./components/AddBlock";
-import { v4 as uuid } from "uuid";
-import AddSourceModal from "./components/SourceModal/AddSourceModal";
-import AddBlockModal from "./components/BlockModal/AddBlockModal";
-import AddLeadModal from "./components/Lead/AddLeadModal";
 
 const nodeTypes = {
   addLead: AddLead,
@@ -41,7 +48,11 @@ const nodeTypes = {
 function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { isSourceModalOpen, isLeadModalOpen, isBlockModalOpen } = useSelector(
+    (state: RootState) => state.main
+  );
+  const dispatch = useDispatch();
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -82,21 +93,9 @@ function App() {
     });
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleOk = () => {
-    setIsModalOpen(false);
+    //
   };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  useEffect(() => {
-    showModal();
-  }, []);
 
   return (
     <Wrapper className="flex-center">
@@ -144,21 +143,21 @@ function App() {
         </ReactFlow>
       </div>
 
-      {/* <AddSourceModal
-        open={isModalOpen}
+      <AddSourceModal
+        open={isSourceModalOpen}
         handleOk={handleOk}
-        handleCancel={handleCancel}
-      /> */}
+        handleCancel={() => dispatch(toggleSourceModal())}
+      />
 
-      {/* <AddBlockModal
-        open={isModalOpen}
+      <AddBlockModal
+        open={isBlockModalOpen}
         handleOk={handleOk}
-        handleCancel={handleCancel}
-      /> */}
+        handleCancel={() => dispatch(toggleBlockModal())}
+      />
       <AddLeadModal
-        open={isModalOpen}
+        open={isLeadModalOpen}
         handleOk={handleOk}
-        handleCancel={handleCancel}
+        handleCancel={() => dispatch(toggleLeadModal())}
       />
     </Wrapper>
   );

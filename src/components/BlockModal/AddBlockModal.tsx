@@ -61,6 +61,7 @@ const AddBlockModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       onCancel={handleCancel}
       title="Add Blocks"
       description="Click on a block to configure and add it in sequence."
+      height={550}
     >
       <h2>Sources</h2>
       <div className="cards-wrapper">
