@@ -12,10 +12,17 @@ export interface NodeType {
   draggable: boolean;
 }
 
+export type NotificationType = "success" | "info" | "warning" | "error";
+
 export type ModalProps = {
   open: boolean;
-  handleOk: () => void;
+  handleOk?: () => void;
   handleCancel: () => void;
+  openNotification?: (
+    type: NotificationType,
+    message: string,
+    description: string
+  ) => void;
 };
 
 export type SourceProps = {
@@ -31,7 +38,7 @@ export type SourceProps = {
 export type MainModalProps = {
   children?: React.ReactNode;
   open: boolean;
-  onOk: () => void;
+  onOk?: () => void;
   onCancel: () => void;
   title: string;
   description: string;

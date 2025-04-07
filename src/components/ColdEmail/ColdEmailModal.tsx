@@ -13,6 +13,10 @@ import { RootState } from "../../store";
 import { v4 as uuid } from "uuid";
 import { COLORS } from "../../utils/Colors";
 import { setEdges, setNodes } from "../../reducers/nodesSlice";
+import {
+  EmailNodePosition,
+  spaceBetweenEmailNode,
+} from "../../utils/Constants";
 
 const Wrapper = styled.div`
   width: 99%;
@@ -39,8 +43,16 @@ const Wrapper = styled.div`
   }
 `;
 
-const EmailNodePosition = { x: 410, y: 450 };
-export const spaceBetweenEmailNode = 180;
+const emailAsOptions = [
+  {
+    label: "New Email",
+    value: "new",
+  },
+  {
+    label: "RE:Follow Up",
+    value: "follow",
+  },
+];
 
 const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
   const [selectValue, setSelectValue] = useState<EmailTemplate>({
@@ -49,6 +61,7 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
     offer: "",
     subject: "",
   });
+  const [followUpValue, setFollowUpValue] = useState<string | null>(null);
 
   const { nodes, edges } = useSelector((state: RootState) => state.nodes);
   const { emailTemplates } = useSelector((state: RootState) => state.main);
@@ -61,6 +74,10 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
   const clickHandler = () => {
     dispatch(toggleTemplateModal());
     dispatch(toggleColdEmailModal());
+  };
+
+  const onChangeFollowUp = (value: string) => {
+    setFollowUpValue(value);
   };
 
   const formatTemplates = () => {
@@ -83,7 +100,7 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
     const emailNodes = nodes.filter(
       (node) => node.type === "email" || node.type === "addBlock"
     );
-    const lastNodeIndex = emailNodes.length - 1;
+    const lastNodeIndex = 0;
 
     const lastNodeId = emailNodes[lastNodeIndex].id;
 
@@ -108,23 +125,35 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
 
   const addNode = () => {
     const parsedValue = JSON.parse(selectValue as unknown as string);
+    const emailNodes = nodes.filter(
+      (node) => node.type === "email" || node.type === "delay"
+    );
+    const lastEmailNode = emailNodes[emailNodes.length - 1];
+
+    const lastEmailNodePosition = lastEmailNode
+      ? lastEmailNode.position.y
+      : EmailNodePosition.y;
 
     const newEmailNode = {
       id: uuid(),
       type: "email",
-      position: EmailNodePosition,
+      position: {
+        x: EmailNodePosition.x,
+        y: lastEmailNodePosition + spaceBetweenEmailNode,
+      },
       data: {
         label: parsedValue.name,
         value: parsedValue,
         icBg: COLORS.sourceBg,
         icColor: COLORS.sourceIcon,
         icBorder: COLORS.sourceBorder,
+        followUp: followUpValue,
       },
       draggable: true,
     };
 
     const alignNodes = nodes.map((node) => {
-      if (node.type === "addBlock" || node.type === "email") {
+      if (node.type === "addBlock") {
         return {
           ...node,
           position: {
@@ -142,6 +171,11 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
     addEdges(newEmailNode.id);
 
     dispatch(toggleColdEmailModal());
+  };
+
+  const checkIsFollowUp = () => {
+    const emailNodes = nodes.filter((node) => node.type === "email");
+    return emailNodes.length > 0;
   };
 
   return (
@@ -165,9 +199,23 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
           allowClear
           className="select"
           onChange={handleChange}
-          placeholder="Search for an Email Template"
+          placeholder="Select an Email Template"
           options={formatTemplates()}
         />
+        {checkIsFollowUp() && (
+          <>
+            <div className="header">
+              <h3>Send Email As</h3>
+            </div>
+            <Select
+              allowClear
+              className="select"
+              onChange={onChangeFollowUp}
+              placeholder="Select an option"
+              options={emailAsOptions}
+            />
+          </>
+        )}
         {selectValue ? (
           <Button type="primary" className="btn-insert" onClick={addNode}>
             Insert

@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setEdges, setNodes } from "../../reducers/nodesSlice";
 import { spaceBetweenLeadNode } from "./AddLeadModal";
-import { spaceBetweenEmailNode } from "../ColdEmail/ColdEmailModal";
 import { NodeType } from "../../utils/Types";
+import { spaceBetweenEmailNode } from "../../utils/Constants";
 
 const Lead = ({ data, id, type }: NodeType) => {
   const { label, icBg, icBorder, icColor } = data;
@@ -19,6 +19,10 @@ const Lead = ({ data, id, type }: NodeType) => {
     // removing node
     const updatedNodes = nodes.filter((node) => node.id !== id);
     const removedNodeIndex = nodes.findIndex((node) => node.id === id);
+
+    console.log(nodes);
+
+    console.log(updatedNodes);
 
     // aligning node in the flowchart
     const alignedNodes = updatedNodes.map((node, i) => {
@@ -35,10 +39,18 @@ const Lead = ({ data, id, type }: NodeType) => {
           },
         };
       } else if (
-        type === "email" &&
-        (node.type === "addBlock" || node.type === "email") &&
-        i < removedNodeIndex
+        (type === "email" || type === "delay") &&
+        (node.type === "email" || node.type === "delay") &&
+        i >= removedNodeIndex
       ) {
+        return {
+          ...node,
+          position: {
+            ...node.position,
+            y: node.position.y - spaceBetweenEmailNode,
+          },
+        };
+      } else if (node.type === "addBlock") {
         return {
           ...node,
           position: {
@@ -72,6 +84,30 @@ const Lead = ({ data, id, type }: NodeType) => {
     }
   };
 
+  const getTitle = (type: string) => {
+    switch (type) {
+      case "lead":
+        return "Leads from";
+      case "email":
+        return "Email";
+      case "delay":
+        return "Delay";
+      default:
+        return "Leads from";
+    }
+  };
+
+  const getSubText = (type: string) => {
+    switch (type) {
+      case "email":
+        return "Template : ";
+      case "delay":
+        return "Wait";
+      default:
+        return "";
+    }
+  };
+
   return (
     <Wrapper className="node" icBg={icBg} icColor={icColor} icBorder={icBorder}>
       <Handle type="target" position={Position.Top} className="handle" />
@@ -81,8 +117,10 @@ const Lead = ({ data, id, type }: NodeType) => {
         </div>
       </div>
       <div className="right">
-        <p className="title">Leads from </p>
-        <p className="leads-label">{label}</p>
+        <p className="title">{getTitle(type)}</p>
+        <p className="leads-label">
+          {getSubText(type)} <span>{label}</span>
+        </p>
       </div>
 
       <div className="actions-wrapper">

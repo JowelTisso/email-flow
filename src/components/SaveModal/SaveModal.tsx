@@ -2,7 +2,6 @@ import {
   Alert,
   Checkbox,
   CheckboxProps,
-  //   CheckboxProps,
   DatePicker,
   Divider,
   Form,
@@ -13,12 +12,14 @@ import {
   TimePicker,
   Tooltip,
 } from "antd";
-import { StyledModal } from "./SaveModalStyles";
-import { ModalProps } from "../../utils/Types";
-import { BsQuestionCircle } from "react-icons/bs";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { BsQuestionCircle } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { saveNodes, saveSchedule } from "../../services/allServices";
 import { RootState } from "../../store";
+import { ModalProps } from "../../utils/Types";
+import { StyledModal } from "./SaveModalStyles";
+import { toggleSaveModal } from "../../reducers/mainSlice";
 
 const { Option } = Select;
 
@@ -32,36 +33,98 @@ const days = [
 ];
 
 type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
+  time: Date;
 };
 
-const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
+export interface DataType {
+  time: Date;
+  body: string;
+  subject: string;
+  email: string;
+}
+
+const config = {
+  rules: [
+    {
+      type: "object" as const,
+      message: "Please select time!",
+    },
+  ],
+};
+
+const SaveModal: React.FC<ModalProps> = ({
+  open,
+  handleCancel,
+  openNotification,
+}) => {
   const [randomCheckbox, setRandomCheckbox] = useState(true);
   const { nodes } = useSelector((state: RootState) => state.nodes);
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
 
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
-    console.log(nodes);
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    try {
+      console.log(nodes);
+
+      const leadNodes = nodes.filter((node) => node.type === "lead");
+      const emailNodes = nodes.filter((node) => node.type === "email");
+
+      if (leadNodes.length === 0) {
+        if (openNotification)
+          openNotification("error", "Add at least one Lead List", "");
+        return;
+      }
+
+      if (emailNodes.length === 0) {
+        if (openNotification)
+          openNotification("error", "Add at least one Email Template", "");
+        return;
+      }
+
+      const leadNodeArr = leadNodes.reduce((leads, node) => {
+        leads = [...leads, ...(node.data.emails as Array<string>)];
+
+        return leads;
+      }, [] as string[]);
+
+      const emailNode = nodes.find((node) => node.type === "email")?.data;
+
+      const combinedEmails = leadNodeArr.join(", ");
+
+      const dataToSend: DataType = {
+        time: values.time,
+        body: (
+          emailNode?.value as {
+            body: string;
+          }
+        )?.body,
+        subject: (
+          emailNode?.value as {
+            subject: string;
+          }
+        )?.subject,
+        email: combinedEmails,
+      };
+
+      await saveNodes(nodes);
+      await saveSchedule(dataToSend);
+
+      setTimeout(() => {
+        dispatch(toggleSaveModal());
+      }, 500);
+
+      if (openNotification)
+        openNotification("success", "Success", "Schedule Saved Successfully!");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.log("Failed:", errorInfo);
-  };
-
-  const config = {
-    rules: [
-      {
-        type: "object" as const,
-        required: true,
-        message: "Please select time!",
-      },
-    ],
   };
 
   const onSave = () => {
@@ -95,10 +158,20 @@ const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         layout="vertical"
+        // disabled={true}
       >
         <Form.Item>
           <Space size={"middle"}>
-            <Form.Item name="date" label="Launch on - Date" {...config}>
+            <Form.Item
+              name="date"
+              label="Launch on - Date"
+              rules={[
+                {
+                  type: "object" as const,
+                  message: "Please select time!",
+                },
+              ]}
+            >
               <DatePicker
                 style={{
                   width: "250px",
@@ -106,7 +179,17 @@ const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
                 }}
               />
             </Form.Item>
-            <Form.Item name="time-picker" label="TimePicker" {...config}>
+            <Form.Item
+              name="time"
+              label="TimePicker"
+              rules={[
+                {
+                  type: "object" as const,
+                  required: true,
+                  message: "Please select time!",
+                },
+              ]}
+            >
               <TimePicker
                 style={{
                   width: "200px",
@@ -116,11 +199,7 @@ const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
                 format="h:mm A"
               />
             </Form.Item>
-            <Form.Item
-              name="timezone"
-              label="Timezone"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="timezone" label="Timezone">
               <Select
                 placeholder="Select a option and change input text above"
                 onChange={() => {}}
@@ -164,7 +243,7 @@ const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
               <Space>
                 <Form.Item
                   label="FROM (minutes)"
-                  name={"from-min"}
+                  name={"from"}
                   initialValue={"10"}
                 >
                   <Input
@@ -177,11 +256,7 @@ const SaveModal: React.FC<ModalProps> = ({ open, handleOk, handleCancel }) => {
                     }}
                   />
                 </Form.Item>
-                <Form.Item
-                  label="TO (minutes)"
-                  name={"to-min"}
-                  initialValue={"20"}
-                >
+                <Form.Item label="TO (minutes)" name={"to"} initialValue={"20"}>
                   <Input
                     placeholder="input placeholder"
                     type="number"

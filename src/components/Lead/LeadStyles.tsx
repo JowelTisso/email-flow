@@ -48,6 +48,10 @@ export const Wrapper = styled.div<{
     .leads-label {
       font-size: 0.9rem;
       text-align: start;
+
+      span {
+        color: ${(props) => props.icColor || COLORS.leadUserIcon};
+      }
     }
   }
 

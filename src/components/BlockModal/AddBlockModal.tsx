@@ -3,14 +3,17 @@ import { ModalProps } from "../../utils/Types";
 import { BsEnvelope, BsCheckCircle } from "react-icons/bs";
 import { SourceCard } from "../SourceModal/AddSourceModal";
 import { COLORS } from "../../utils/Colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   toggleBlockModal,
   toggleColdEmailModal,
+  toggleDelayModal,
 } from "../../reducers/mainSlice";
 import { v4 as uuid } from "uuid";
+import { RootState } from "../../store";
 
 const AddBlockModal = ({ open, handleOk, handleCancel }: ModalProps) => {
+  const { nodes } = useSelector((state: RootState) => state.nodes);
   const dispatch = useDispatch();
 
   const outReachList = [
@@ -47,6 +50,10 @@ const AddBlockModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       icBg: COLORS.conditionBg,
       icColor: COLORS.conditionIcon,
       icBorder: COLORS.conditionBorder,
+      onClick: () => {
+        dispatch(toggleDelayModal());
+        dispatch(toggleBlockModal());
+      },
     },
     {
       id: uuid(),
@@ -68,6 +75,11 @@ const AddBlockModal = ({ open, handleOk, handleCancel }: ModalProps) => {
     },
   ];
 
+  const checkIsFollowUp = () => {
+    const emailNodes = nodes.filter((node) => node.type === "email");
+    return emailNodes.length > 0;
+  };
+
   return (
     <MainModal
       open={open}
@@ -83,12 +95,16 @@ const AddBlockModal = ({ open, handleOk, handleCancel }: ModalProps) => {
           <SourceCard key={props.id} {...props} />
         ))}
       </div>
-      <h2>Conditions</h2>
-      <div className="cards-wrapper">
-        {conditionsList.map((props) => (
-          <SourceCard key={props.id} {...props} />
-        ))}
-      </div>
+      {checkIsFollowUp() && (
+        <>
+          <h2>Conditions</h2>
+          <div className="cards-wrapper">
+            {conditionsList.map((props) => (
+              <SourceCard key={props.id} {...props} />
+            ))}
+          </div>
+        </>
+      )}
     </MainModal>
   );
 };

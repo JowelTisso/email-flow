@@ -9,6 +9,7 @@ export interface MainState {
   isColdEmailModalOpen: boolean;
   isTemplateModalOpen: boolean;
   isSaveModalOpen: boolean;
+  isDelayModalOpen: boolean;
   emailTemplates: EmailTemplate[];
 }
 
@@ -19,6 +20,7 @@ const initialState: MainState = {
   isColdEmailModalOpen: false,
   isTemplateModalOpen: false,
   isSaveModalOpen: false,
+  isDelayModalOpen: false,
   emailTemplates: initialEmailTemplates,
 };
 
@@ -44,6 +46,9 @@ export const mainSlice = createSlice({
     toggleSaveModal: (state) => {
       state.isSaveModalOpen = !state.isSaveModalOpen;
     },
+    toggleDelayModal: (state) => {
+      state.isDelayModalOpen = !state.isDelayModalOpen;
+    },
     addEmailTemplate: (state, action: PayloadAction<EmailTemplate>) => {
       state.emailTemplates = [...state.emailTemplates, action.payload];
     },
@@ -58,6 +63,7 @@ export const {
   toggleTemplateModal,
   toggleSaveModal,
   addEmailTemplate,
+  toggleDelayModal,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

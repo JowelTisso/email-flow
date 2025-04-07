@@ -57,3 +57,25 @@ export const EditorToolbars =
   "bold italic forecolor | alignleft aligncenter " +
   "alignright alignjustify | bullist numlist outdent indent | " +
   "removeformat | help";
+
+export const formatDate = (date: Date) => {
+  const formattedDate = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  return formattedDate;
+};
+
+export const formatTime = (date: Date) => {
+  const formattedTime = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return formattedTime;
+};
+
+export const EmailNodePosition = { x: 410, y: 270 };
+export const spaceBetweenEmailNode = 180;
