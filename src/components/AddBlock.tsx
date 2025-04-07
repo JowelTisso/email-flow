@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { BsPlusLg } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { toggleBlockModal } from "../reducers/mainSlice";
+import { Handle, Position } from "@xyflow/react";
 
 const Wrapper = styled.div`
   width: 30px;
@@ -21,6 +22,7 @@ const AddBlock = () => {
       className="flex-center"
       onClick={() => dispatch(toggleBlockModal())}
     >
+      <Handle type="target" position={Position.Top} className="handle" />
       <BsPlusLg className="icon" size={18} />
     </Wrapper>
   );

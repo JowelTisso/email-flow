@@ -22,7 +22,17 @@ export const StyledModal = styled(Modal)<{ top?: number; height?: number }>`
       }
 
       .business-input-group {
-        display: grid;
+        margin-bottom: 0;
+      }
+
+      .actions-wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        span {
+          display: flex;
+          gap: 20px;
+        }
       }
     }
   }

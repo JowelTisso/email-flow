@@ -1,4 +1,16 @@
 import { ReactElement } from "react";
+export interface NodeType {
+  id: string;
+  type: string;
+  position: { x: number; y: number };
+  data: {
+    label: string;
+    icBg?: string;
+    icColor?: string;
+    icBorder?: string;
+  };
+  draggable: boolean;
+}
 
 export type ModalProps = {
   open: boolean;
@@ -27,3 +39,10 @@ export type MainModalProps = {
   height?: number;
   showTooltip?: boolean;
 };
+
+export interface EmailTemplate {
+  name: string;
+  offer: string;
+  subject: string;
+  body: string;
+}

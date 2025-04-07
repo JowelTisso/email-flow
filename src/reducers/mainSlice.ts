@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { EmailTemplate } from "../utils/Types";
+import { initialEmailTemplates } from "../utils/data";
 
 export interface MainState {
   isSourceModalOpen: boolean;
@@ -6,6 +8,8 @@ export interface MainState {
   isBlockModalOpen: boolean;
   isColdEmailModalOpen: boolean;
   isTemplateModalOpen: boolean;
+  isSaveModalOpen: boolean;
+  emailTemplates: EmailTemplate[];
 }
 
 const initialState: MainState = {
@@ -14,6 +18,8 @@ const initialState: MainState = {
   isBlockModalOpen: false,
   isColdEmailModalOpen: false,
   isTemplateModalOpen: false,
+  isSaveModalOpen: false,
+  emailTemplates: initialEmailTemplates,
 };
 
 export const mainSlice = createSlice({
@@ -35,6 +41,12 @@ export const mainSlice = createSlice({
     toggleTemplateModal: (state) => {
       state.isTemplateModalOpen = !state.isTemplateModalOpen;
     },
+    toggleSaveModal: (state) => {
+      state.isSaveModalOpen = !state.isSaveModalOpen;
+    },
+    addEmailTemplate: (state, action: PayloadAction<EmailTemplate>) => {
+      state.emailTemplates = [...state.emailTemplates, action.payload];
+    },
   },
 });
 
@@ -44,6 +56,8 @@ export const {
   toggleBlockModal,
   toggleColdEmailModal,
   toggleTemplateModal,
+  toggleSaveModal,
+  addEmailTemplate,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

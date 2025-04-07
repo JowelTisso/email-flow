@@ -55,14 +55,4 @@ export const Header = styled.header`
       margin-top: 5px;
     }
   }
-
-  .right-section {
-    .btn-action {
-      outline: 3px solid lightblue;
-      border-radius: 9px;
-      .btn-icon {
-        margin-right: 10px;
-      }
-    }
-  }
 `;

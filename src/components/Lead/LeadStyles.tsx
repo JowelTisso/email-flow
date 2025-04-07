@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { COLORS } from "../../utils/Colors";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{
+  icBg?: string;
+  icColor?: string;
+  icBorder?: string;
+}>`
   padding: 15px;
   display: flex;
   gap: 10px;
@@ -18,15 +22,15 @@ export const Wrapper = styled.div`
     align-items: start;
 
     .icon-wrapper {
-      background-color: ${COLORS.leadUserBg};
+      background-color: ${(props) => props.icBg || COLORS.leadUserBg};
       padding: 5px 2px;
       width: 40px;
       border-radius: 5px;
-      border: 2px solid ${COLORS.leadUserBorder};
+      border: 2px solid ${(props) => props.icBorder || COLORS.leadUserBorder};
     }
 
     .user-icon {
-      color: ${COLORS.leadUserIcon};
+      color: ${(props) => props.icColor || COLORS.leadUserIcon};
     }
   }
 

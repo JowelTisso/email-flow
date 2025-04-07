@@ -14,15 +14,15 @@ export const initialNodes = [
     draggable: false,
   },
   {
-    id: "4",
+    id: "3",
     type: "addBlock",
-    position: { x: 520, y: 420 },
+    position: { x: 500, y: 420 },
     data: {},
     draggable: false,
   },
 ];
 
-export const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+export const initialEdges = [{ id: "e2-3", source: "2", target: "3" }];
 
 export const dropDownMenuItems = [
   {

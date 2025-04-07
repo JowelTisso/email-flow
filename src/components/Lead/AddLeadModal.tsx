@@ -4,6 +4,12 @@ import MainModal from "../ModalWrapper/MainModal";
 import styled from "styled-components";
 import { BsPlusCircle } from "react-icons/bs";
 import { useState } from "react";
+import { v4 as uuid } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLeadModal } from "../../reducers/mainSlice";
+import { setEdges, setNodes } from "../../reducers/nodesSlice";
+import { RootState } from "../../store";
+import { sampleLeadListData } from "../../utils/data";
 
 const Wrapper = styled.div`
   width: 99%;
@@ -14,19 +20,6 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .btn-action {
-      border: 3px solid #06a5fc;
-      color: #06a5fc;
-      font-weight: 500;
-      height: 40px;
-      width: 130px;
-      font-size: 1rem;
-
-      .icon {
-        font-weight: 600;
-      }
-    }
   }
 
   .select {
@@ -40,11 +33,21 @@ const Wrapper = styled.div`
     margin-left: auto;
     outline: 3px solid lightblue;
     font-weight: 500;
+    height: 40px;
+    font-size: 1rem;
+    width: 70px;
   }
 `;
 
+const LeadNodePosition = { x: 410, y: 120 };
+export const spaceBetweenLeadNode = 230;
+
 const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
-  const [selectValue, setSelectValue] = useState([""]);
+  const [selectValue, setSelectValue] = useState<string[]>([]);
+
+  const { nodes, edges } = useSelector((state: RootState) => state.nodes);
+
+  const dispatch = useDispatch();
 
   const handleChange = (value: string[]) => {
     setSelectValue(value);
@@ -52,6 +55,59 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
 
   const clickHandler = () => {
     window.open("https://run.salesblink.io/import-list/new", "_target");
+  };
+
+  const addNode = () => {
+    let emailsList: string[] = [];
+
+    selectValue.forEach((leadListId) => {
+      const selectedList = sampleLeadListData.find(
+        (list) => list.id === leadListId
+      );
+      if (selectedList) {
+        emailsList = emailsList.concat(selectedList.emails);
+      }
+    });
+
+    const newLeadNode = {
+      id: uuid(),
+      type: "lead",
+      position: LeadNodePosition,
+      data: {
+        label: "Sample List (Added by SalesBlink)",
+        emails: emailsList,
+      },
+      draggable: false,
+    };
+
+    const alignNodes = nodes.map((node) => {
+      if (node.type === "addLead" || node.type === "lead") {
+        return {
+          ...node,
+          position: {
+            ...node.position,
+            x: node.position.x + spaceBetweenLeadNode,
+          },
+        };
+      }
+
+      return node;
+    });
+
+    const newEdges = [
+      ...edges,
+      {
+        id: uuid(),
+        source: newLeadNode.id,
+        target: "2",
+      },
+    ];
+
+    dispatch(setNodes([...alignNodes, newLeadNode]));
+
+    dispatch(setEdges(newEdges));
+
+    dispatch(toggleLeadModal());
   };
 
   return (
@@ -68,8 +124,8 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       <Wrapper>
         <div className="header">
           <h3>Select your List(s)</h3>
-          <Button className="btn-action" onClick={clickHandler}>
-            New List <BsPlusCircle className="icon" size={17} />
+          <Button className="btn-outline" onClick={clickHandler} size="large">
+            New List <BsPlusCircle size={17} />
           </Button>
         </div>
         <Select
@@ -79,30 +135,14 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
           onChange={handleChange}
           placeholder="Search for lists"
           options={[
-            { value: "jack", label: "Jack" },
-            { value: "lucy", label: "Lucy" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "Yiminghe", label: "yiminghe" },
-            { value: "disabled", label: "Disabled", disabled: true },
+            {
+              value: "8cf00168-cfae-4d23-811a-dfb944ffd79f",
+              label: "Sample List",
+            },
           ]}
         />
-        {selectValue.length > 0 ? (
-          <Button type="primary" className="btn-insert">
+        {selectValue?.length > 0 ? (
+          <Button type="primary" className="btn-insert" onClick={addNode}>
             Insert
           </Button>
         ) : null}

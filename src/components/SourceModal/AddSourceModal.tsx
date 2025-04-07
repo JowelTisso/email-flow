@@ -4,6 +4,7 @@ import { SourceCardWrapper } from "./AddSourceStyles";
 import { ModalProps, SourceProps } from "../../utils/Types";
 import { useDispatch } from "react-redux";
 import { toggleLeadModal, toggleSourceModal } from "../../reducers/mainSlice";
+import { v4 as uuid } from "uuid";
 
 export const SourceCard = ({
   title,
@@ -38,6 +39,7 @@ const AddSourceModal = ({ open, handleOk, handleCancel }: ModalProps) => {
 
   const sourceList = [
     {
+      id: uuid(),
       title: "Leads from List(s)",
       description: "Connect multiple lists as source for this sequence.",
       onClick: () => {
@@ -47,18 +49,21 @@ const AddSourceModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       icon: <BsPersonPlus className="user-icon" size={35} />,
     },
     {
+      id: uuid(),
       title: "Segment by Events",
       description:
         "Create a segment of leads who have engaged with emails previously.",
       icon: <BsPersonPlus className="user-icon" size={35} />,
     },
     {
+      id: uuid(),
       title: "Segment of List",
       description:
         "Create a segment of leads which match SalesBlink Variables.",
       icon: <BsPersonPlus className="user-icon" size={35} />,
     },
     {
+      id: uuid(),
       title: "Lead from CRM Integration",
       description:
         "Create a segment of leads who have engaged with emails previously.",
@@ -77,7 +82,7 @@ const AddSourceModal = ({ open, handleOk, handleCancel }: ModalProps) => {
       <h2>Sources</h2>
       <div className="cards-wrapper">
         {sourceList.map((props) => (
-          <SourceCard {...props} />
+          <SourceCard key={props.id} {...props} />
         ))}
       </div>
     </MainModal>

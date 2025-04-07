@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { ModalProps } from "../../utils/Types";
 import { StyledModal } from "./TemplateModalStyles";
 import { EditorPlugins, EditorToolbars } from "../../utils/Constants";
-import { Divider, Form, Input, Select } from "antd";
+import { Button, Divider, Form, Input, Select, Space } from "antd";
 
 const TemplateModal: React.FC<ModalProps> = ({
   open,
@@ -35,44 +35,43 @@ const TemplateModal: React.FC<ModalProps> = ({
               label="Template Name"
               name="template-name"
               rules={[{ required: true }]}
-              style={{
-                width: "350px",
-              }}
             >
               <Input
                 className="input"
                 placeholder="Enter Template Name (for internal purpose)"
+                style={{
+                  width: "350px",
+                }}
               />
             </Form.Item>
             <Form.Item className="business-input-group">
-              <Form.Item
-                label="Business Offer / What are you selling?"
-                name="business-offer"
-                style={{
-                  width: "300px",
-                  display: "inline-block",
-                  backgroundColor: "lightblue",
-                }}
-              >
-                <Input
-                  className="input"
-                  placeholder="Your Offer, Ex. SEO services for enterprises in USA"
-                />
-              </Form.Item>
-              <Form.Item
-                label=""
-                name="language"
-                style={{
-                  width: "200px",
-                  display: "inline-block",
-                  backgroundColor: "lightblue",
-                }}
-              >
-                <Select placeholder="Select Language" className="input">
-                  <Option value="English">English</Option>
-                  <Option value="Hindi">Hindi</Option>
-                </Select>
-              </Form.Item>
+              <Space>
+                <Form.Item
+                  label="Business Offer / What are you selling?"
+                  name="business-offer"
+                >
+                  <Input
+                    className="input"
+                    placeholder="Your Offer, Ex. SEO services for enterprises in USA"
+                    style={{
+                      width: "300px",
+                    }}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={null}
+                  name="language"
+                  style={{
+                    width: "200px",
+                    marginTop: "30px",
+                  }}
+                >
+                  <Select placeholder="Select Language" className="input">
+                    <Option value="English">English</Option>
+                    <Option value="Hindi">Hindi</Option>
+                  </Select>
+                </Form.Item>
+              </Space>
             </Form.Item>
             <Form.Item
               label="Subject Line"
@@ -100,6 +99,19 @@ const TemplateModal: React.FC<ModalProps> = ({
               />
             </Form.Item>
           </Form>
+          <div className="actions-wrapper">
+            <Button className="btn-outline" size="large">
+              Preview & Test
+            </Button>
+            <span>
+              <Button className="btn-outline danger" size="large">
+                Discard
+              </Button>
+              <Button type="primary" className="btn-primary" size="large">
+                Save Email Template
+              </Button>
+            </span>
+          </div>
         </section>
         <section className="right">
           <Divider

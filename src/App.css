@@ -7,3 +7,28 @@
   justify-content: center;
   align-items: center;
 }
+
+.btn-outline {
+  border: 3px solid #06a5fc;
+  color: #06a5fc;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.danger {
+  border: 3px solid #e43f47;
+  color: #e43f47;
+}
+
+.danger:hover {
+  border: 3px solid #f29195 !important;
+  color: #f29195 !important;
+}
+
+.btn-primary {
+  outline: 3px solid lightblue;
+  border-radius: 9px;
+  .btn-icon {
+    margin-right: 10px;
+  }
+}
