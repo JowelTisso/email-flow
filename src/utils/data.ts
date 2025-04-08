@@ -1,13 +1,15 @@
 export const sampleLeadListData = [
   {
     id: "8cf00168-cfae-4d23-811a-dfb944ffd79f",
+    name: "Sample List (added by Jowel)",
+    contacts_count: 4,
+    emails: ["joweltisso@gmail.com", "xoveltixo@gmail.com"],
+  },
+  {
+    id: "8cf00168-cfae-4d23-811a-dfb944ffd79f2",
     name: "Sample List (added by SalesBlink)",
     contacts_count: 4,
-    emails: [
-      "joweltisso@gmail.com",
-      "xoveltixo@gmail.com",
-      "sushant@salesblink.io",
-    ],
+    emails: ["sushant@salesblink.io"],
   },
 ];
 

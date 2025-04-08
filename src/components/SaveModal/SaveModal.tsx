@@ -116,6 +116,8 @@ const SaveModal: React.FC<ModalProps> = ({
         openNotification("success", "Success", "Schedule Saved Successfully!");
     } catch (err) {
       console.log(err);
+      if (openNotification)
+        openNotification("error", "Error", "Failed to save schedule!");
     }
   };
 

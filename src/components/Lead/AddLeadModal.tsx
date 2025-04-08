@@ -39,17 +39,24 @@ const Wrapper = styled.div`
   }
 `;
 
+interface LeadListType {
+  id: string;
+  name: string;
+  contacts_count: number;
+  emails: string[];
+}
+
 const LeadNodePosition = { x: 410, y: 120 };
 export const spaceBetweenLeadNode = 230;
 
 const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
-  const [selectValue, setSelectValue] = useState<string[]>([]);
+  const [selectValue, setSelectValue] = useState<string>("");
 
   const { nodes, edges } = useSelector((state: RootState) => state.nodes);
 
   const dispatch = useDispatch();
 
-  const handleChange = (value: string[]) => {
+  const handleChange = (value: string) => {
     setSelectValue(value);
   };
 
@@ -58,24 +65,17 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
   };
 
   const addNode = () => {
-    let emailsList: string[] = [];
-
-    selectValue.forEach((leadListId) => {
-      const selectedList = sampleLeadListData.find(
-        (list) => list.id === leadListId
-      );
-      if (selectedList) {
-        emailsList = emailsList.concat(selectedList.emails);
-      }
-    });
+    const selectedList = sampleLeadListData.find(
+      (list) => list.id === selectValue
+    );
 
     const newLeadNode = {
       id: uuid(),
       type: "lead",
       position: LeadNodePosition,
       data: {
-        label: "Sample List (Added by SalesBlink)",
-        emails: emailsList,
+        label: selectedList?.name,
+        emails: selectedList?.emails,
       },
       draggable: false,
     };
@@ -110,6 +110,13 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
     dispatch(toggleLeadModal());
   };
 
+  const formatOptions = (sampleLeadListData: LeadListType[]) => {
+    return sampleLeadListData?.map((list) => ({
+      label: list.name,
+      value: list.id,
+    }));
+  };
+
   return (
     <MainModal
       open={open}
@@ -129,21 +136,11 @@ const AddLeadModal = ({ open, handleOk, handleCancel }: ModalProps) => {
           </Button>
         </div>
         <Select
-          mode="multiple"
           allowClear
           className="select"
           onChange={handleChange}
           placeholder="Search for lists"
-          options={[
-            {
-              value: "8cf00168-cfae-4d23-811a-dfb944ffd79f",
-              label: "Sample List",
-            },
-            {
-              value: "8cf00168-cfae-4d23-811a-dfb944ffd79f-asdasd",
-              label: "Sample List by Salesblink",
-            },
-          ]}
+          options={formatOptions(sampleLeadListData)}
         />
         {selectValue?.length > 0 ? (
           <Button type="primary" className="btn-insert" onClick={addNode}>

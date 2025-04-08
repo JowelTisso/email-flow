@@ -29,3 +29,12 @@ export const saveSchedule = async (data: DataType) => {
     console.log(err);
   }
 };
+
+export const getAllNodes = async () => {
+  try {
+    const allNodes = await axiosInstance.get("/nodes");
+    return allNodes.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

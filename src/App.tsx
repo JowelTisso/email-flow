@@ -28,12 +28,18 @@ import {
   toggleSourceModal,
   toggleTemplateModal,
 } from "./reducers/mainSlice";
-import { onConnect, onEdgesChange, onNodesChange } from "./reducers/nodesSlice";
+import {
+  onConnect,
+  onEdgesChange,
+  onNodesChange,
+  setNodes,
+} from "./reducers/nodesSlice";
 import { RootState } from "./store";
 import { Header, Wrapper } from "./styles";
-import { dropDownMenuItems } from "./utils/Constants";
+import { dropDownMenuItems, initialNodes } from "./utils/Constants";
 import { NotificationType } from "./utils/Types";
 import { useEffect } from "react";
+import { getAllNodes } from "./services/allServices";
 
 const nodeTypes = {
   addLead: AddLead,
@@ -81,6 +87,15 @@ function App() {
   };
 
   useEffect(() => {
+    (async () => {
+      const allNodes = await getAllNodes();
+      if (allNodes.length) {
+        dispatch(setNodes(allNodes));
+      } else {
+        dispatch(setNodes(initialNodes));
+      }
+    })();
+
     window.onbeforeunload = function () {
       return "Are you sure you want to reload the page?";
     };
