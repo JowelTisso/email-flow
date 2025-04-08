@@ -1,54 +1,58 @@
-# React + TypeScript + Vite
+# Email Flow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Email Flow is a web application designed to assist users in creating and visualizing flowcharts for email marketing campaigns. Built with React, TypeScript, and Vite, it offers a responsive and intuitive interface for designing complex email workflows.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive Flowchart Creation**: Easily design and customize email marketing workflows using a drag-and-drop interface.
+- **Scheduling a job**: Scheduling a job to execute the actions according to the flowchart for cold emails.
+- **Component-Based Architecture**: Leverages React's component system for modular and maintainable code.
+- **Type Safety**: Utilizes TypeScript to ensure type safety and enhance code quality.
+- **Fast Development**: Powered by Vite for rapid development and hot module replacement.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Ensure you have the following installed:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Installation
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. **Clone the Repository**:
+
+   ```
+   git clone https://github.com/JowelTisso/email-flow.git
+   ```
+
+2. **Navigate to the Project Directory**:
+
+   ```
+   cd email-flow
+   ```
+
+3. **Install Dependencies**:
+
+   ```
+   npm install
+   ```
+
+4. Development To start the development server:
+
+   Using npm:
+
+   ```
+     npm run dev
+   ```
+
+5. Building for Production To create a production build:
+
+   Using npm:
+
+   ```
+     npm run build
+   ```
+
+   The output will be in the dist directory.
