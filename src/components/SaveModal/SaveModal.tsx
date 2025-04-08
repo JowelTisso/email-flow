@@ -65,8 +65,6 @@ const SaveModal: React.FC<ModalProps> = ({
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
-      console.log(nodes);
-
       const leadNodes = nodes.filter((node) => node.type === "lead");
       const emailNodes = nodes.filter((node) => node.type === "email");
 

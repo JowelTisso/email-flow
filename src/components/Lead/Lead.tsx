@@ -1,13 +1,36 @@
 import { Handle, Position } from "@xyflow/react";
-import { Wrapper } from "./LeadStyles";
-import { BsPersonPlus } from "react-icons/bs";
-import { BsX, BsPencilSquare } from "react-icons/bs";
+import { BsPersonPlus, BsX } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { setEdges, setNodes } from "../../reducers/nodesSlice";
-import { spaceBetweenLeadNode } from "./AddLeadModal";
-import { NodeType } from "../../utils/Types";
+import { RootState } from "../../store";
 import { spaceBetweenEmailNode } from "../../utils/Constants";
+import { NodeType } from "../../utils/Types";
+import { spaceBetweenLeadNode } from "./AddLeadModal";
+import { Wrapper } from "./LeadStyles";
+
+const getTitle = (type: string) => {
+  switch (type) {
+    case "lead":
+      return "Leads from";
+    case "email":
+      return "Email";
+    case "delay":
+      return "Delay";
+    default:
+      return "Leads from";
+  }
+};
+
+const getSubText = (type: string) => {
+  switch (type) {
+    case "email":
+      return "Template : ";
+    case "delay":
+      return "Wait";
+    default:
+      return "";
+  }
+};
 
 const Lead = ({ data, id, type }: NodeType) => {
   const { label, icBg, icBorder, icColor } = data;
@@ -20,16 +43,12 @@ const Lead = ({ data, id, type }: NodeType) => {
     const updatedNodes = nodes.filter((node) => node.id !== id);
     const removedNodeIndex = nodes.findIndex((node) => node.id === id);
 
-    console.log(nodes);
-
-    console.log(updatedNodes);
-
     // aligning node in the flowchart
-    const alignedNodes = updatedNodes.map((node, i) => {
+    const alignedNodes = updatedNodes.map((node, currentNodeIndex) => {
       if (
         type === "lead" &&
         (node.type === "addLead" || node.type === "lead") &&
-        i < removedNodeIndex
+        currentNodeIndex < removedNodeIndex
       ) {
         return {
           ...node,
@@ -41,7 +60,7 @@ const Lead = ({ data, id, type }: NodeType) => {
       } else if (
         (type === "email" || type === "delay") &&
         (node.type === "email" || node.type === "delay") &&
-        i >= removedNodeIndex
+        currentNodeIndex >= removedNodeIndex
       ) {
         return {
           ...node,
@@ -50,7 +69,7 @@ const Lead = ({ data, id, type }: NodeType) => {
             y: node.position.y - spaceBetweenEmailNode,
           },
         };
-      } else if (node.type === "addBlock") {
+      } else if (type !== "lead" && node.type === "addBlock") {
         return {
           ...node,
           position: {
@@ -84,30 +103,6 @@ const Lead = ({ data, id, type }: NodeType) => {
     }
   };
 
-  const getTitle = (type: string) => {
-    switch (type) {
-      case "lead":
-        return "Leads from";
-      case "email":
-        return "Email";
-      case "delay":
-        return "Delay";
-      default:
-        return "Leads from";
-    }
-  };
-
-  const getSubText = (type: string) => {
-    switch (type) {
-      case "email":
-        return "Template : ";
-      case "delay":
-        return "Wait";
-      default:
-        return "";
-    }
-  };
-
   return (
     <Wrapper className="node" icBg={icBg} icColor={icColor} icBorder={icBorder}>
       <Handle type="target" position={Position.Top} className="handle" />
@@ -124,7 +119,6 @@ const Lead = ({ data, id, type }: NodeType) => {
       </div>
 
       <div className="actions-wrapper">
-        <BsPencilSquare className="edit" />
         <BsX className="delete" size={15} onClick={onDelete} />
       </div>
       <Handle type="source" position={Position.Bottom} className="handle" />

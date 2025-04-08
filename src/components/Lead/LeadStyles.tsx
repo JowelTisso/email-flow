@@ -63,14 +63,6 @@ export const Wrapper = styled.div<{
     right: -8px;
     visibility: hidden;
 
-    .edit {
-      background-color: #fff7b1;
-      padding: 5px;
-      border-radius: 3px;
-      color: #a39515;
-      cursor: pointer;
-    }
-
     .delete {
       background-color: ${COLORS.leadUserBg};
       padding: 5px;
