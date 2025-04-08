@@ -33,6 +33,7 @@ import { RootState } from "./store";
 import { Header, Wrapper } from "./styles";
 import { dropDownMenuItems } from "./utils/Constants";
 import { NotificationType } from "./utils/Types";
+import { useEffect } from "react";
 
 const nodeTypes = {
   addLead: AddLead,
@@ -78,6 +79,12 @@ function App() {
       description,
     });
   };
+
+  useEffect(() => {
+    window.onbeforeunload = function () {
+      return "Are you sure you want to reload the page?";
+    };
+  }, []);
 
   return (
     <>
@@ -151,6 +158,7 @@ function App() {
           open={isTemplateModalOpen}
           handleOk={handleOk}
           handleCancel={() => dispatch(toggleTemplateModal())}
+          openNotification={openNotification}
         />
 
         <SaveModal

@@ -147,7 +147,7 @@ const ColdEmailModal = ({ open, handleOk, handleCancel }: ModalProps) => {
         icBg: COLORS.sourceBg,
         icColor: COLORS.sourceIcon,
         icBorder: COLORS.sourceBorder,
-        followUp: followUpValue,
+        followUp: checkIsFollowUp() ? followUpValue : null,
       },
       draggable: true,
     };

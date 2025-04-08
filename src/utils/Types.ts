@@ -8,6 +8,7 @@ export interface NodeType {
     icBg?: string;
     icColor?: string;
     icBorder?: string;
+    followUp?: string;
   };
   draggable: boolean;
 }

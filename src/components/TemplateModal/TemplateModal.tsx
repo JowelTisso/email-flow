@@ -1,18 +1,54 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef } from "react";
-import { ModalProps } from "../../utils/Types";
+import { EmailTemplate, ModalProps } from "../../utils/Types";
 import { StyledModal } from "./TemplateModalStyles";
 import { EditorPlugins, EditorToolbars } from "../../utils/Constants";
-import { Button, Divider, Form, Input, Select, Space } from "antd";
+import { Button, Divider, Form, FormProps, Input, Select, Space } from "antd";
+import { useDispatch } from "react-redux";
+import {
+  addEmailTemplate,
+  toggleTemplateModal,
+} from "../../reducers/mainSlice";
+
+const { Option } = Select;
+
+interface TinyBody {
+  level: {
+    content: "";
+  };
+}
 
 const TemplateModal: React.FC<ModalProps> = ({
   open,
   handleOk,
   handleCancel,
+  openNotification,
 }) => {
   const editorRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const { Option } = Select;
+  const onFinish: FormProps<EmailTemplate>["onFinish"] = async (values) => {
+    try {
+      const { name, offer, subject, body } = values;
+
+      const newTemplate = {
+        name,
+        offer,
+        subject,
+        body: (body as unknown as TinyBody).level.content,
+      };
+
+      dispatch(addEmailTemplate(newTemplate));
+      if (openNotification)
+        openNotification("success", "Saved", "Template Saved Successfully!");
+
+      setTimeout(() => {
+        dispatch(toggleTemplateModal());
+      }, 500);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <StyledModal
@@ -30,10 +66,11 @@ const TemplateModal: React.FC<ModalProps> = ({
             layout="vertical"
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
+            onFinish={onFinish}
           >
             <Form.Item
               label="Template Name"
-              name="template-name"
+              name="name"
               rules={[{ required: true }]}
             >
               <Input
@@ -48,7 +85,7 @@ const TemplateModal: React.FC<ModalProps> = ({
               <Space>
                 <Form.Item
                   label="Business Offer / What are you selling?"
-                  name="business-offer"
+                  name="offer"
                 >
                   <Input
                     className="input"
@@ -75,7 +112,7 @@ const TemplateModal: React.FC<ModalProps> = ({
             </Form.Item>
             <Form.Item
               label="Subject Line"
-              name="subject-line"
+              name="subject"
               rules={[{ required: true }]}
               style={{
                 width: "700px",
@@ -83,7 +120,7 @@ const TemplateModal: React.FC<ModalProps> = ({
             >
               <Input className="input" placeholder="Enter Subject Line" />
             </Form.Item>
-            <Form.Item label="" name="email-body" rules={[{ required: true }]}>
+            <Form.Item label="" name="body" rules={[{ required: true }]}>
               <Editor
                 apiKey={import.meta.env.VITE_TinyMCE_API_KEY}
                 onInit={(_evt, editor) => (editorRef.current = editor)}
@@ -98,20 +135,25 @@ const TemplateModal: React.FC<ModalProps> = ({
                 }}
               />
             </Form.Item>
+            <div className="actions-wrapper">
+              <Button className="btn-outline" size="large">
+                Preview & Test
+              </Button>
+              <span>
+                <Button className="btn-outline danger" size="large">
+                  Discard
+                </Button>
+                <Button
+                  type="primary"
+                  className="btn-primary"
+                  size="large"
+                  htmlType="submit"
+                >
+                  Save Email Template
+                </Button>
+              </span>
+            </div>
           </Form>
-          <div className="actions-wrapper">
-            <Button className="btn-outline" size="large">
-              Preview & Test
-            </Button>
-            <span>
-              <Button className="btn-outline danger" size="large">
-                Discard
-              </Button>
-              <Button type="primary" className="btn-primary" size="large">
-                Save Email Template
-              </Button>
-            </span>
-          </div>
         </section>
         <section className="right">
           <Divider

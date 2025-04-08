@@ -116,6 +116,14 @@ const Lead = ({ data, id, type }: NodeType) => {
         <p className="leads-label">
           {getSubText(type)} <span>{label}</span>
         </p>
+        {data.followUp && (
+          <p className="leads-label">
+            Type :{" "}
+            <span>
+              {data.followUp === "follow" ? "RE: Follow Up" : "New Mail"}
+            </span>
+          </p>
+        )}
       </div>
 
       <div className="actions-wrapper">

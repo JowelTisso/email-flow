@@ -16,7 +16,7 @@ export const initialNodes = [
   {
     id: "3",
     type: "addBlock",
-    position: { x: 500, y: 420 },
+    position: { x: 500, y: 450 },
     data: {},
     draggable: false,
   },
